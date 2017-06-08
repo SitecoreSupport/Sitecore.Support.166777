@@ -263,11 +263,12 @@ function meme(a) {
 
                  $j.each(this,
                      function () {
-                         var cleanString = scHtmlEscape(this.Template.replace("\\", "~"));
+                         var cleanString = scHtmlEscape(this.Template.replace("\\", "~").replace("'", "&quot;")); //fix for issue #166777
                          var escapedTitle = scHtmlEscape(this.LocalizedName);
+                         var escapedTitle2 = scHtmlEscape(this.LocalizedName.replace("'", "&quot;")); //fix for issue #166777
                          var innerText = (this.LocalizedName.length > 32 ? (scHtmlEscape(this.LocalizedName.substring(0, 32)) + "...") : escapedTitle);
-                         var escapedValue = scHtmlEscape(this.Value);
-                         b += '<li class="filter"><a href="javascript:void(0);" title="' + escapedTitle + '" class="facetClick" onclick="javascript:AppendFacet(\'' + this.ID + "','" + cleanString + "','" + this.Custom + "','" + escapedTitle + "');\"><span>" + innerText + "</span> <span>" + escapedValue + "</span>" + "</a></li>";
+                         var escapedValue = scHtmlEscape(this.Value);						 
+                         b += '<li class="filter"><a href="javascript:void(0);" title="' + escapedTitle + '" class="facetClick" onclick="javascript:AppendFacet(\'' + this.ID + "','" + cleanString + "','" + this.Custom + "','" + escapedTitle2 + "');\"><span>" + innerText + "</span> <span>" + escapedValue + "</span>" + "</a></li>";
                      });
 
                  b += "</ul></div></div></div>";
@@ -305,8 +306,8 @@ function meme(a) {
 
 function AppendFacet(b, c, custom, title) {
     var facetFilters = b.split(',');
-    var filterValues = c.split('/');
-    var titleValues = title.split('|');
+    var filterValues = c.replace("&quot;", "'").split('/'); //fix for issue #166777
+    var titleValues = title.replace("&quot;", "'").split('|'); //fix for issue #166777
     var o = new Array();
     FacetOn = true;
 
